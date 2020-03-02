@@ -26,7 +26,7 @@ namespace Counsel.Models
         [Column("Password")]
         public string Password {get;set;}
  
-        public Workplace Workplace {get;set;}
-        public List<ChatPerson> Chats {get;set;} = new List<ChatPerson>(1000);
+        public Workplace Workplace {get;set;} 
+        public ICollection<ChatPerson> Chats {get;set;}
     }
 }

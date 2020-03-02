@@ -1,0 +1,65 @@
+<!--img  class="img-responsive" src="../../assets/workplace-background.jpeg"-->
+
+<style>
+    body {
+        height: 100vh;
+        background-size: 100% 100%;
+    }
+    .column {
+        float: left;
+        width: 50%;
+    }
+    .center {
+        position: absolute;
+        width: 40%;
+        height: 30%;
+        margin: 30% 0 0% 30%;
+    }
+    button {
+        width: 30%;
+        height: 25%;
+        margin-left: 35%;
+        font-size: x-large;
+        border-radius: 50px;
+        background: ghostwhite;
+        color: darkgray;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+        font-family: serif;
+    }
+    input {
+        width: 90%;
+        margin-left: 5%;
+    }
+    h3 {
+        font-family: serif;
+        color: darkgray;
+        text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+        text-align: center;
+    }
+    #alert{
+        text-align: center;
+        width: 100%;
+        background-color: burlywood;
+        border-style: dashed;
+    }
+</style>
+<html>
+
+<body background="../../assets/images/workplace-background.jpeg">
+    <div class="row center">
+        <div class="column">
+            <h3>Company Code</h3>
+            <input #textbox type="text" [(ngModel)]="ecode" required>
+        </div>
+        <div class="column">
+            <h3>Confirmation Code</h3>
+            <input #boxtext type="text" [(ngModel)]="ccode">
+        </div>
+        <button (click)="Proceed(textbox.value,boxtext.value)" [disabled]="!ecode || !ccode">{{pending}}</button>
+    </div>
+    <div id="alert">
+        <div *ngIf="alert">Workplace not found. Please try again.</div>
+    </div>
+</body>
+
+</html>

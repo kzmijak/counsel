@@ -1,4 +1,4 @@
-using DVDMovie.Models;
+using Counsel.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -62,6 +62,7 @@ namespace counsel
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();

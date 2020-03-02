@@ -1,7 +1,7 @@
 using Counsel.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DVDMovie.Models {
+namespace Counsel.Models {
     public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> opts): base(opts){}

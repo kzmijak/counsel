@@ -5,7 +5,7 @@ export class Chat
 {
     constructor
     (
-        public id?: number,
+        public chatId?: number,
         public people?: Person[],
         public messages?: Message[]
     ){}

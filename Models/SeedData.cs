@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using DVDMovie.Models;
 using Counsel.Models;
 
 namespace Counsel
@@ -19,6 +18,8 @@ namespace Counsel
                     EntryCode = "1111",
                     ConfirmationCode = "1111"  
                 };
+                context.Workplaces.Add(w1);
+                context.SaveChanges();
 
                 context.People.AddRange(
                     new Person

@@ -5,7 +5,7 @@ export class Person
 {
     constructor
     (
-        public id?:number,
+        public personId?:number,
         public image?:string,
         public fname?:string,
         public lname?:string,
@@ -13,6 +13,6 @@ export class Person
         public email?:string,
         public password?:string,
         public workplace?:Workplace,
-        public chats:Chat[] = []
+        public chats?:Chat[] 
     ){}
 }

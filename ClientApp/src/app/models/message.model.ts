@@ -5,7 +5,7 @@ export class Message
 {
     constructor
     (
-        public id?:number,
+        public messageId?:number,
         public sender?:Person,
         public content?:string,
         public timestamp?:Date,

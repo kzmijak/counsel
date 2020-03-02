@@ -4,9 +4,9 @@ export class Workplace
 {
     constructor
     (
-        public id?:number,
+        public workplaceId?:number,
         public entryCode?:string,
         public confirmationCode?:string,
-        public employees:Person[] = []
+        public employees?:Person[] 
     ){}
 }

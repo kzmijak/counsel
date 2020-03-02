@@ -5,7 +5,7 @@ export class ChatPerson
 {
     constructor
     (
-        public chatdId?:number,
+        public chatId?:number,
         public chat?: Chat,
         public personId?:number,
         public person?:Person

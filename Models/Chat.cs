@@ -9,8 +9,8 @@ namespace Counsel.Models
         [Column("ChatId")]
         public int ChatId {get;set;}
 
-        public List<ChatPerson> People {get;set;}
-        public List<Message> Messages {get;set;}
+        public ICollection<ChatPerson> People {get;set;} 
+        public ICollection<Message> Messages {get;set;}
 
     }
 }

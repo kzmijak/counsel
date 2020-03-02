@@ -14,8 +14,7 @@ namespace Counsel.Models
 
         [Column("ConfirmationCode")]
         public string ConfirmationCode {get;set;}
-
-        [Column("Employees")]
-        public List<Person> Employees {get;set;}
+        
+        public ICollection<Person> Employees {get;set;}
     }
 }
