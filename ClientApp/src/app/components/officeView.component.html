@@ -2,19 +2,30 @@
     body{
         background-image: url('../../assets/images/background2.jpeg');
         background-size: 100% 100%;
-        height: 100%;
+        overflow-x: hidden;
     }
+    div.inline { float:left; }
 </style>
 
-<body>
+<body [style.height.px]='innerHeight' [style.width.px]='innerWidth'>
     <navigation-component></navigation-component>
-    <div class="row">
-        <div class="column">
-            <user-component></user-component>
+    <div>
+        <div class="inline">
+            <user-component 
+            [selectedperson]="person" 
+            [loggedIn]="loggedIn"
+            ></user-component>
         </div>
-        <div class="column">
-            etsetestse
+        <div class="inline">
+            <people-list-component
+            [people]="people"
+            (selectPerson)="setSelectedPerson($event)"
+            ></people-list-component>
+
+            <selection-component></selection-component>
+        </div>
+        <div class="inline" style="float: right;"> 
+            <chat-component></chat-component>
         </div>
     </div>
-    
 </body>

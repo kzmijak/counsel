@@ -11,7 +11,7 @@ import { WorkplaceService } from "../services/workplace.service";
 })
 export class WorkplaceSelectionComponent
 {
-    constructor(private router:Router, private wpservices:WorkplaceService, ){}
+    constructor(private router:Router, private wpservices:WorkplaceService){}
 
     private pending?:string = "Start"
 
@@ -26,7 +26,8 @@ export class WorkplaceSelectionComponent
                 {
                     this.wpservices.workplace = wp;
                     this.pending = wp.workplaceId.toString();
-                    this.router.navigateByUrl("/office");
+                    localStorage.setItem('workplace', JSON.stringify(wp));
+                    this.router.navigateByUrl('/office', {state: {workplace: wp}});
                 }
             });
         }

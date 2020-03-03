@@ -46,11 +46,21 @@ namespace Counsel.Controllers
                 .Where(c => c.PersonId == id)
                 .Include(c => c.Workplace)
                 .Include(c => c.Chats)
-                .FirstOrDefault();
+                .First();
 
             if(person.Workplace != null)
             {
-                person.Workplace.Employees = null;
+                Workplace newwork = new Workplace
+                {
+                    WorkplaceId = person.Workplace.WorkplaceId,
+                    EntryCode = person.Workplace.EntryCode,
+                    ConfirmationCode = person.Workplace.ConfirmationCode
+                };
+                person.Workplace = newwork;
+            }
+            if(person.Chats != null)
+            {
+                person.Chats=null;
             }
             // chats may cause stack overflow in the future
             return person;

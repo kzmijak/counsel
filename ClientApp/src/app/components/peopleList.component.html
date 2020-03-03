@@ -1,0 +1,31 @@
+<style>
+    div.inline { float:left; }
+    img{
+        height: 60px;
+        width: 60px;
+        border-radius: 50% 50%;
+    }
+
+    img:hover{
+        box-shadow: 0 0 2px 1px violet;
+    }
+
+</style>
+
+<div [style.height.px]='innerHeight' [style.width.px]='innerWidth' style="overflow-y: scroll;">
+    <table >
+            <tr *ngFor="let p of people">
+                <div class="inline">
+                    <a>
+                        <img  (click)="selectPerson$(p.personId)" src={{p.image}}>
+                    </a>
+                </div>
+                <div class="inline">
+                    <h2>{{p.fname}} {{p.lname}}</h2>
+                </div>
+                <div class="inline">
+                    <h3>{{p.role}}</h3>
+                </div>
+            </tr>
+    </table>
+</div>

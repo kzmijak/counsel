@@ -1,8 +1,6 @@
 <style>
     body{
-        background-color: rgba(44, 44, 44, 0.363);
-        width: 400px;
-        background-size: 100% 100%;
+        background-color: rgba(0, 0, 0, 0.3);
     }
 
     table{
@@ -25,15 +23,14 @@
     }
 </style>
 
-<body>
+<body [style.height.px]='innerHeight' [style.width.px]='innerWidth'>
     <table>
+        <tr><th>{{mode}}</th></tr>
         <tr><th colspan="2"><img src="../../assets/images/logo.jpeg"></th></tr>
         <tr><th>Name</th><td><input type="text"></td></tr>
         <tr><th>Surname</th><td><input type="text"></td></tr>
         <tr><th>Role</th><td><input type="text"></td></tr>
         <tr><th>Email</th><td><input type="text"></td></tr>
         <tr><th>Password</th><td><input type="text"></td></tr>
-        <tr><button>Edit</button></tr>
-        <tr><button>Remove</button>
     </table>
 </body>

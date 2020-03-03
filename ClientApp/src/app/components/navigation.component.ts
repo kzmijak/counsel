@@ -1,4 +1,6 @@
 import { Component } from "@angular/core";
+import { WorkplaceService } from "../services/workplace.service";
+import { Workplace } from "../models/workplace.model";
 
 @Component({
     selector: "navigation-component",
@@ -6,5 +8,4 @@ import { Component } from "@angular/core";
 })
 export class NavigationComponent
 {
-
 }

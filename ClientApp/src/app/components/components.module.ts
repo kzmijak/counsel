@@ -7,6 +7,8 @@ import { OfficeViewComponent } from "./officeView.component";
 import { NavigationComponent } from "./navigation.component";
 import { SelectionComponent } from "./selection.component";
 import { UserComponent } from "./user.component";
+import { PeopleListComonent } from "./peopleList.component";
+import { ChatComponent } from "./chat.component";
 
 @NgModule({
     declarations: [
@@ -15,6 +17,8 @@ import { UserComponent } from "./user.component";
         NavigationComponent,
         SelectionComponent,
         UserComponent,
+        PeopleListComonent,
+        ChatComponent
     ],
     imports: [ BrowserModule, RouterModule, FormsModule]
 })
