@@ -12,14 +12,19 @@
     <div>
         <div class="inline">
             <user-component 
-            [selectedperson]="person" 
+            [selectedPeople]="selectedPeople" 
             [loggedIn]="loggedIn"
+            [workplace]='workplace'
+            (setLoggedIn)="setLoggedIn($event)"
+            (logOut)="logOut()"
+            (register)="register($event)"
             ></user-component>
         </div>
         <div class="inline">
             <people-list-component
             [people]="people"
-            (selectPerson)="setSelectedPerson($event)"
+            [loggedIn]="loggedIn"
+            [selectedPeople]="selectedPeople"
             ></people-list-component>
 
             <selection-component></selection-component>

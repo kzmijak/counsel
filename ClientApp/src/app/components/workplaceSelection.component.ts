@@ -19,22 +19,19 @@ export class WorkplaceSelectionComponent
 
     Proceed(value1:string, value2:string): void
     {
+        localStorage.clear();
         if(value1 != "" && value2 != "")
         {
-            this.workplaces.forEach(wp => {
-                if(wp.entryCode== value1 && wp.confirmationCode == value2)
-                {
-                    this.wpservices.workplace = wp;
-                    this.pending = wp.workplaceId.toString();
-                    localStorage.setItem('workplace', JSON.stringify(wp));
-                    this.router.navigateByUrl('/office', {state: {workplace: wp}});
-                }
-            });
+            this.wpservices.getWorkplaces().subscribe(Response => {
+                Response.forEach(wp => {
+                    if(wp.entryCode== value1 && wp.confirmationCode == value2)
+                    {
+                        localStorage.setItem('workplace', JSON.stringify(wp));
+                        this.router.navigateByUrl('/office');
+                    }
+                });
+                this.alert=true;
+            })
         }
-        this.alert=true;
-    }
-
-    get workplaces(){
-        return this.wpservices.workplaces;
     }
 }

@@ -12,7 +12,7 @@ namespace Counsel.Controllers
         private DataContext context;
         public PersonController(DataContext ctx) => (context) = (ctx);
 
-        [HttpGet("all")]
+        [HttpGet]
         public IEnumerable<Person> GetPeople()
         {
             var people = context.People
@@ -64,6 +64,19 @@ namespace Counsel.Controllers
             }
             // chats may cause stack overflow in the future
             return person;
+        }
+
+        [HttpPost]
+        public IActionResult InsertPerson([FromBody] Person person)
+        {
+            if(ModelState.IsValid)
+            {
+                context.Attach(person.Workplace);
+                context.Add(person);
+                context.SaveChanges();
+                return Ok(ModelState);
+            }
+            return BadRequest(ModelState);
         }
     }
 }

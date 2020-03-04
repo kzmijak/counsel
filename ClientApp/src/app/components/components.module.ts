@@ -7,7 +7,7 @@ import { OfficeViewComponent } from "./officeView.component";
 import { NavigationComponent } from "./navigation.component";
 import { SelectionComponent } from "./selection.component";
 import { UserComponent } from "./user.component";
-import { PeopleListComonent } from "./peopleList.component";
+import { PeopleListComponent } from "./peopleList.component";
 import { ChatComponent } from "./chat.component";
 
 @NgModule({
@@ -17,7 +17,7 @@ import { ChatComponent } from "./chat.component";
         NavigationComponent,
         SelectionComponent,
         UserComponent,
-        PeopleListComonent,
+        PeopleListComponent,
         ChatComponent
     ],
     imports: [ BrowserModule, RouterModule, FormsModule]

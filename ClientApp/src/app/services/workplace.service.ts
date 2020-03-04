@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Workplace } from "../models/workplace.model";
+import { Observable } from "rxjs";
 
 const workplaceUrl = "/api/workplace/"
 
@@ -9,19 +10,15 @@ export class WorkplaceService
 {
     constructor(private http:HttpClient)
     {
-        this.getWorkplaces();
     }
 
     getWorkplaces()
     {
-        this.http.get<any>(workplaceUrl + "all").subscribe(response => this.workplaces = response)
+        return this.http.get<any>(workplaceUrl);
     }
 
-    getWorkplace(id:number)
+    getWorkplace(id:number): Observable<Workplace>
     {
-        this.http.get(workplaceUrl + id).subscribe(response => this.workplace = response)
+        return this.http.get(workplaceUrl + id);
     }
-    
-    workplace: Workplace;
-    workplaces: Workplace[] = [];
 }

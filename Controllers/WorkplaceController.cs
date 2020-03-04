@@ -13,7 +13,7 @@ namespace Counsel.Controllers
 
         public WorkplaceController(DataContext ctx) => (context) = (ctx);
 
-        [HttpGet("all")]
+        [HttpGet]
         public IEnumerable<Workplace> GetWorkplaces()
         {
             var workplaces = context.Workplaces.Include(c => c.Employees).ToList();

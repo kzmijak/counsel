@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import { Person } from "../models/person.model";
+import { Workplace } from "../models/workplace.model";
 
 @Component({
     selector: "user-component",
@@ -7,9 +8,12 @@ import { Person } from "../models/person.model";
 })
 export class UserComponent
 {
-    @Input() selectedperson?: Person;
+    @Input() selectedPeople?: Person[];
     @Input() loggedIn: Person;
-    @Output() onClick = new EventEmitter();
+    @Input() workplace: Workplace;
+    @Output() setLoggedIn = new EventEmitter();
+    @Output() logOut = new EventEmitter();
+    @Output() register = new EventEmitter();
     public innerHeight: number;
     public innerWidth: number = 350;
 
@@ -21,29 +25,38 @@ export class UserComponent
         this.innerHeight = window.innerHeight - 70;
     }
 
-    get mode():string
+    reset()
     {
-        if(this.loggedIn)
-        {
-            if(this.selectedperson == this.loggedIn)
-            {
-                return "Your profile";
-            }
-            if(this.selectedperson != this.loggedIn)
-            {
-                return "Informations about " + this.selectedperson.fname + ":";
-            }
+        this.selectedPeople = null;
+        localStorage.removeItem("selectedPeople");
+    }
+
+    register$(fname:string, lname:string, role:string, email:string, password:string, image:string)
+    {
+        let p = {
+            Image:image, fName:fname, lName:lname, role:role, email:email, password:password, workplace:this.workplace
         }
-        if(this.loggedIn == null)
+        this.register.emit(p);
+    }
+
+    logIn(email:string, password:string)
+    {
+        if(this.selectedPerson.email == email && this.selectedPerson.password == password)
         {
-            if(this.selectedperson == null)
-            {
-                return "Register";
-            }
-            if(this.selectedperson != null)
-            {
-                return "Log In";
-            }
+            this.setLoggedIn.emit(this.selectedPerson.personId);
         }
+    }
+
+    logOut$()
+    {
+        this.logOut.emit();
+    }
+
+    get selectedPerson(){
+        if(this.selectedPeople)
+        {
+            return this.selectedPeople[this.selectedPeople.length - 1];
+        }
+        return null;
     }
 }

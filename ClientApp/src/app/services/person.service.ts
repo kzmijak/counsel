@@ -1,35 +1,29 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Person } from "../models/person.model";
+import { Observable } from "rxjs";
 
-const personUrl = "/api/person/"
+const personUrl = "/api/person/";
+const personUrlShort = "/api/person"
 
 @Injectable()
 export class PersonService
 {
     constructor(private http:HttpClient){
-        console.log("PersonService() constructor");
-        this.getPeople();
     }
 
-    getPeople()
+    getPeople(): Observable<Person[]>
     {
-        this.http.get<any>(personUrl + "all").subscribe(response => {this.people = response});
-        console.log("PersonService.getPeople()");
+        return this.http.get<any>(personUrl);
     }
     
-    getPerson(id:number)
+    getPerson(id:number): Observable<Person>
     {
-        this.http.get(personUrl + id).subscribe(response =>{
-            this.person = new Person;
-            console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+ (response as Person).personId);
-            this.person = response;
-            console.log("------------------------------"+ this.person.personId);
-        } )
-        console.log("PersonService.getPerson(id="+ id +")");
+        return this.http.get(personUrl + id);
     }
 
-
-    person:Person;
-    people:Person[] = [];
+    insertPerson(person:any): Observable<any>
+    {
+        return this.http.post(personUrlShort, person)
+    }
 }

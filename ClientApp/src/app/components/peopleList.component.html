@@ -5,26 +5,27 @@
         width: 60px;
         border-radius: 50% 50%;
     }
-
-    img:hover{
-        box-shadow: 0 0 2px 1px violet;
-    }
+    tr:nth-child(even) {
+    background-color:rgba(205, 191, 207, 0.521)
+}
 
 </style>
 
-<div [style.height.px]='innerHeight' [style.width.px]='innerWidth' style="overflow-y: scroll;">
-    <table >
+<div [style.height.px]='innerHeight' [style.width.px]='innerWidth' style="overflow-y: scroll; overflow-x: hidden;">
+    <h3 style="text-align: center;">Click on an image to select</h3>
+    <table style="width: inherit;">
             <tr *ngFor="let p of people">
                 <div class="inline">
                     <a>
-                        <img  (click)="selectPerson$(p.personId)" src={{p.image}}>
+                        <img  [style.box-shadow]='selected(p.personId)' (click)="selectPerson(p.personId)" src={{p.image}}>
                     </a>
                 </div>
                 <div class="inline">
-                    <h2>{{p.fname}} {{p.lname}}</h2>
+                    <h2>{{p.fName}} {{p.lName}}</h2>
+                    <h5>{{p.email}}</h5>
                 </div>
-                <div class="inline">
-                    <h3>{{p.role}}</h3>
+                <div style="float: right; margin-right: 30px;" class="inline">
+                    <h4>{{p.role}}</h4>
                 </div>
             </tr>
     </table>

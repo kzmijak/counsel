@@ -11,8 +11,6 @@ import { Person } from "../models/person.model";
 export class OfficeViewComponent implements OnInit{
     public innerWidth: any;
     public innerHeight: any;
-    public workplace: Workplace;
-    public loggedIn?: Person;
 
     constructor(private wpservice: WorkplaceService, private pservice: PersonService ){}
 
@@ -21,39 +19,59 @@ export class OfficeViewComponent implements OnInit{
         console.log("OfficeViewComponent.ngOnInit()");  
         this.innerWidth = window.innerWidth;
         this.innerHeight = window.innerHeight;
-        this.workplace = JSON.parse(localStorage.getItem('workplace'));
+
+        let temp = [];
+        this.pservice.getPeople().subscribe(Response => {
+            Response.forEach(p => {
+                if(p.workplace.workplaceId == this.workplace.workplaceId)
+                    temp.push(p);
+            })
+            localStorage.setItem("people", JSON.stringify(temp));
+            console.log("Im finished subscribing");
+        });
     }
 
-    get person():Person
+    get workplace():Workplace
     {
-        console.log("OfficeViewComponent.person() (get)" );
-        
-        if(this.pservice.person)
-        {
-            return this.pservice.person;
-        }
+        return JSON.parse(localStorage.getItem('workplace'));
     }
+
     get people():Person[]
     {
-        let temp: Person[] = [];
-        this.pservice.people.forEach(p => {
-            if(p.workplace.workplaceId == this.workplace.workplaceId)
-                temp.push(p);
-        });
-        return temp;
+        console.log("Im retrieving subscribed data");
+        return JSON.parse(localStorage.getItem('people'));
     }
 
-    setSelectedPerson(id:number)
+    get selectedPeople(): Person[]
     {
-        this.pservice.getPerson(id);
-        console.log(this.person);
-        localStorage.setItem("selectedPerson", JSON.stringify(this.pservice.person));
-        console.log("wow I made it, selected:" + this.selectedPerson.personId);
+        return JSON.parse(localStorage.getItem("selectedPeople"));
     }
 
-    get selectedPerson(): Person
+    register(person:any)
     {
-        console.log("Attempting to return json...");
-        return JSON.parse(localStorage.getItem("selectedPerson"));
+        this.pservice.insertPerson(person).subscribe(Response => {
+            this.ngOnInit();
+        })
+    }
+
+    setLoggedIn(id:number)
+    {
+        this.pservice.getPerson(id).subscribe(Response => {
+            localStorage.setItem("loggedIn", JSON.stringify(Response));
+            console.log("Login Successful. Logged as:");
+            console.log(this.loggedIn);
+            this.ngOnInit();
+        })
+    }
+
+    logOut()
+    {
+        localStorage.removeItem("selectedPeople")
+        localStorage.removeItem("loggedIn");
+    }
+
+    get loggedIn()
+    {
+        return JSON.parse(localStorage.getItem("loggedIn"));
     }
 }
