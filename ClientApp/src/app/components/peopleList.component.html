@@ -8,13 +8,35 @@
     tr:nth-child(even) {
     background-color:rgba(205, 191, 207, 0.521)
 }
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar {
+  -ms-overflow-style: none;
+}
+
+.showScroll{
+    position:sticky;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    box-shadow: 0 0 2px 2px rgba(207, 32, 199);
+}
+
+
 
 </style>
 
-<div [style.height.px]='innerHeight' [style.width.px]='innerWidth' style="overflow-y: scroll; overflow-x: hidden;">
-    <h3 style="text-align: center;">Click on an image to select</h3>
+<div (scroll)="onScroll($event)" class="scrollbar" [style.height.px]='innerHeight' [style.width.px]='innerWidth' style="overflow-y: scroll; overflow-x: hidden;">
+    <div 
+        [style.left.px]='innerWidth/2-20'
+        [style.top.px]='10'
+        class="showScroll"
+        *ngIf='scrollDown'>
+    </div>
     <table style="width: inherit;">
-            <tr *ngFor="let p of people">
+            <tr [style.height.px]='rowHeight' *ngFor="let p of people">
                 <div class="inline">
                     <a>
                         <img  [style.box-shadow]='selected(p.personId)' (click)="selectPerson(p.personId)" src={{p.image}}>
@@ -29,4 +51,10 @@
                 </div>
             </tr>
     </table>
+    <div 
+        [style.left.px]='innerWidth/2-20'
+        [style.bottom.px]='10'
+        class="showScroll"
+        *ngIf='scrollUp'>
+    </div>
 </div>

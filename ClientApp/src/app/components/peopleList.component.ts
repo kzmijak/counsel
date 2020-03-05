@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, HostListener } from "@angular/core";
 import { Person } from "../models/person.model";
 import { PersonService } from "../services/person.service";
 
@@ -13,14 +13,22 @@ export class PeopleListComponent{
     public innerHeight: number;
     public innerWidth: number;
     private shadowColor?: string;
+    private checkScroll: string = "UP";
 
     constructor(private pservice:PersonService){}
     
     ngOnInit() 
     {
         console.log("PeopleListComponent.ngOnInit()");
-        this.innerHeight = window.innerHeight - 70;
+        this.innerHeight = window.innerHeight - 70 - 180;
         this.innerWidth = window.innerWidth - 700;
+        console.log((this.people.length * this.rowHeight) + " ::: " + this.innerHeight);
+    }
+
+    @HostListener('window:scroll', ['$event']) 
+    doSomething(event) {
+      console.debug("Scroll Event", document.body.scrollTop);
+      console.debug("Scroll Event", window.pageYOffset );
     }
     
     async selectPerson(id:number)
@@ -104,4 +112,53 @@ export class PeopleListComponent{
         }
         return "0 0 2px 2px " + temp ;
     }
+
+    get rowHeight() :number{
+        return 80;
+    }
+
+    get scrollDown():boolean
+    {
+/*
+        if(this.checkIfAtLow)
+        {
+            return false;
+        }
+        if((this.people.length * this.rowHeight)>this.innerHeight)
+        {
+            return true;
+        }
+        return false;*/
+        if(this.checkScroll == "LOW" || this.checkScroll == "MID")
+        {
+            return true;
+        }
+        return false;
+    }
+
+    get scrollUp(): boolean
+    {
+        if(this.checkScroll == "UP" || this.checkScroll == "MID")
+        {
+            return true;
+        }
+        return false;
+    }
+
+    onScroll(event: any)
+    {
+        if (event.target.offsetHeight + event.target.scrollTop >= event.target.scrollHeight - 50) 
+        {
+            this.checkScroll = "LOW";
+        }
+        else if(event.target.scrollTop < 50) 
+        {
+            this.checkScroll = "UP";
+        }
+        else
+        {
+            this.checkScroll = "MID";
+        }
+    }
+    
 }

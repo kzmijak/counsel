@@ -78,5 +78,31 @@ namespace Counsel.Controllers
             }
             return BadRequest(ModelState);
         }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdatePerson(int id, [FromBody] Person person)
+        {
+            if(ModelState.IsValid)
+            {
+                var entity = context.People.Find(id);
+                context.Entry(entity).CurrentValues.SetValues(person);
+                context.SaveChanges();
+                return Ok(entity);
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletePerson(int id)
+        {
+            if(ModelState.IsValid)
+            {
+                var entity = context.People.Find(id);
+                context.Remove(entity);
+                context.SaveChanges();
+                return Ok(id);
+            }
+            return BadRequest();
+        }
     }
 }

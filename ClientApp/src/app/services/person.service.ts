@@ -26,4 +26,14 @@ export class PersonService
     {
         return this.http.post(personUrlShort, person)
     }
+
+    updatePerson(person:any): Observable<any>
+    {
+        return this.http.put(personUrl + person.personId, person);
+    }
+
+    deletePerson(id:number): Observable<any>
+    {
+        return this.http.delete(personUrl + id);
+    }
 }

@@ -24,25 +24,37 @@
     tr{
         margin-top: 100px;
     }
+    button{
+        position: absolute;
+        height: 70px;
+        width: 100px;
+        bottom: 10px;
+        border-radius: 10px;
+    }
+
+    input[type=text], select {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 </style>
 
 <body [style.height.px]='innerHeight' [style.width.px]='innerWidth'>
     <div *ngIf="loggedIn; then UserBlock else LRBlock"></div>
     <ng-template #UserBlock >
         <table>
-            <tr><th colspan="2"><img src={{loggedIn.image}}></th></tr>
+            <tr><th colspan="2"><img (error)='imageHandler()' src={{imageUrlFix}}></th></tr>
             <tr><th>Name</th><td><input type="text" #eFNameBox [value]='loggedIn.fName'></td></tr>
             <tr><th>Surname</th><td><input type="text" #eLNameBox [value]='loggedIn.lName'></td></tr>
             <tr><th>Role</th><td><input type="text" #eRoleBox [value]='loggedIn.role'></td></tr>
             <tr><th>Email</th><td><input type="text" #eEmailBox [value]='loggedIn.email'></td></tr>
             <tr><th>Password</th><td><input type="text" #ePasswordBox [value]='loggedIn.password'></td></tr>
             <tr><th>Image (URL)</th><td><input type="text" #eImageBox [value]='loggedIn.image'></td></tr>
-            
-            <div class="inline">
-                <button>Edit</button>
-            </div>
-            <div class="inline">
-                <button (click)='logOut$()'>Log Out</button>
+            <div>
+                <button style="left: 10px;" (click)='editMe$(eFNameBox.value,eLNameBox.value,eRoleBox.value,eEmailBox.value,ePasswordBox.value,eImageBox.value)' >Edit</button>
+                <button style="left: 120px;" (click)='logOut$()'>Log Out</button>
+                <button style="left: 230px;" (click)='deleteMe$()'>Delete Account</button>
             </div>
         </table>
     </ng-template>
@@ -50,10 +62,11 @@
         <div *ngIf="selectedPerson; then LoginBlock else RegisterBlock"></div>
         <ng-template #LoginBlock>
             <table>
-                <tr><th colspan="2"><img src={{selectedPerson.image}}></th></tr>
+                <tr><th colspan="2"><img src={{imageUrlFix}}></th></tr>
                 <tr><th>Email</th><td><input #loginemail type="text"></td></tr>
                 <tr><th>Password</th><td><input #loginpassword type="text"></td></tr>
-                <button (click)="logIn(loginemail.value,loginpassword.value)">Login</button><button (click)="reset()">Register</button>
+                <button style="left: 60px;" (click)="logIn(loginemail.value,loginpassword.value)">Login</button>
+                <button style="left: 170px;" (click)="reset()">Register</button>
             </table>
         </ng-template>
         <ng-template #RegisterBlock>
@@ -65,7 +78,7 @@
                 <tr><th>Email</th><td><input #rEmailBox type="text"></td></tr>
                 <tr><th>Password</th><td><input #rPasswordBox type="text"></td></tr>
                 <tr><th>Image (URL)</th><td><input #rImageBox type="text"></td></tr>
-                <button (click)="register$(rFNameBox.value,rLNameBox.value,rRoleBox.value,rEmailBox.value,rPasswordBox.value,rImageBox.value)">Register</button>
+                <button style="left: 100px;" (click)="register$(rFNameBox.value,rLNameBox.value,rRoleBox.value,rEmailBox.value,rPasswordBox.value,rImageBox.value)">Register</button>
             </table>
         </ng-template>
     </ng-template>

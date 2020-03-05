@@ -58,8 +58,6 @@ export class OfficeViewComponent implements OnInit{
     {
         this.pservice.getPerson(id).subscribe(Response => {
             localStorage.setItem("loggedIn", JSON.stringify(Response));
-            console.log("Login Successful. Logged as:");
-            console.log(this.loggedIn);
             this.ngOnInit();
         })
     }
@@ -73,5 +71,21 @@ export class OfficeViewComponent implements OnInit{
     get loggedIn()
     {
         return JSON.parse(localStorage.getItem("loggedIn"));
+    }
+
+    editMe(person:Person)
+    {
+        this.pservice.updatePerson(person).subscribe(Response => {
+            this.setLoggedIn(person.personId);
+            this.ngOnInit();
+        });
+    }
+
+    deleteMe()
+    {
+        let id = this.loggedIn.personId;
+        this.pservice.deletePerson(id).subscribe(Response => {
+            this.ngOnInit();
+        })
     }
 }

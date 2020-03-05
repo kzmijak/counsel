@@ -15,9 +15,11 @@
             [selectedPeople]="selectedPeople" 
             [loggedIn]="loggedIn"
             [workplace]='workplace'
+            (register)="register($event)"
             (setLoggedIn)="setLoggedIn($event)"
             (logOut)="logOut()"
-            (register)="register($event)"
+            (editMe)="editMe($event)"
+            (deleteMe)="deleteMe()"
             ></user-component>
         </div>
         <div class="inline">
