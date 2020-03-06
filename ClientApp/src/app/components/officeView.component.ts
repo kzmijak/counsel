@@ -3,6 +3,8 @@ import { Workplace } from "../models/workplace.model";
 import { WorkplaceService } from "../services/workplace.service";
 import { PersonService } from "../services/person.service";
 import { Person } from "../models/person.model";
+import { Chat } from "../models/chat.model";
+import { ChatService } from "../services/chat.service";
 
 @Component({
     selector: "office-view-component",
@@ -12,7 +14,7 @@ export class OfficeViewComponent implements OnInit{
     public innerWidth: any;
     public innerHeight: any;
 
-    constructor(private wpservice: WorkplaceService, private pservice: PersonService ){}
+    constructor(private wpservice: WorkplaceService, private pservice: PersonService, private cservice: ChatService ){}
 
     ngOnInit() 
     {
@@ -27,8 +29,10 @@ export class OfficeViewComponent implements OnInit{
                     temp.push(p);
             })
             localStorage.setItem("people", JSON.stringify(temp));
-            console.log("Im finished subscribing");
         });
+        this.cservice.getChats().subscribe(Response => {
+            localStorage.setItem("chatHistory", JSON.stringify(Response));
+        })
     }
 
     get workplace():Workplace
@@ -38,7 +42,6 @@ export class OfficeViewComponent implements OnInit{
 
     get people():Person[]
     {
-        console.log("Im retrieving subscribed data");
         return JSON.parse(localStorage.getItem('people'));
     }
 
@@ -87,5 +90,23 @@ export class OfficeViewComponent implements OnInit{
         this.pservice.deletePerson(id).subscribe(Response => {
             this.ngOnInit();
         })
+    }
+    
+    get chatHistory(): Chat[]
+    {
+        return JSON.parse(localStorage.getItem("chatHistory"));
+    }
+
+    addChat(chat:Chat)
+    {
+        console.log("ADDING!")
+        console.log(chat)
+        this.cservice.insertChat(chat).subscribe(Response => console.log(Response));
+    }
+
+    editChat(chat:Chat)
+    {
+        console.log("UPDATING!")
+        this.cservice.updateChat(chat);
     }
 }

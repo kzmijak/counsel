@@ -6,7 +6,7 @@ namespace Counsel.Models
     public class Person
     {
         [Column("PersonId")]
-        public int PersonId {get;set;}
+        public int? PersonId {get;set;}
 
         [Column("Image")]
         public string Image {get;set;}
@@ -28,5 +28,7 @@ namespace Counsel.Models
  
         public Workplace Workplace {get;set;} 
         public ICollection<ChatPerson> Chats {get;set;}
+
+        public List<Chat> _Chats;
     }
 }

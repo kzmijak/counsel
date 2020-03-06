@@ -39,7 +39,6 @@
   box-sizing: border-box;
 }
 </style>
-
 <body [style.height.px]='innerHeight' [style.width.px]='innerWidth'>
     <div *ngIf="loggedIn; then UserBlock else LRBlock"></div>
     <ng-template #UserBlock >

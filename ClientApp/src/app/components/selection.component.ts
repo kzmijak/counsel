@@ -17,6 +17,6 @@ export class SelectionComponent implements OnInit
     {
         console.log("SelectionComponent.ngOnInit()");
         this.innerWidth = window.innerWidth - 700;
-        this.innerHeight = window.innerHeight - 70;
+        this.innerHeight = 180;
     }
 }

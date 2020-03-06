@@ -6,6 +6,7 @@ export class Chat
     constructor
     (
         public chatId?: number,
+        public title?: string,
         public people?: Person[],
         public messages?: Message[]
     ){}

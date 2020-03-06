@@ -7,10 +7,10 @@ namespace Counsel.Models
     public class ChatPerson
     {
         [Column("ChatId")]
-        public int ChatId {get;set;}
+        public int? ChatId {get;set;}
 
         [Column("PersonId")]
-        public int PersonId {get;set;}
+        public int? PersonId {get;set;}
 
         public Chat Chat {get;set;}
         public Person Person {get;set;}

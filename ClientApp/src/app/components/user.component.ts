@@ -30,9 +30,11 @@ export class UserComponent
         this.selectedPeople = null;
         localStorage.removeItem("selectedPeople");
     }
-
-    register$(fname:string, lname:string, role:string, email:string, password:string, image:string)
+    
+    async register$(fname:string, lname:string, role:string, email:string, password:string, image:string)
     {
+        console.log("CHECKING IMAGE. ")   
+        console.log("CHECKING IMAGE... ")
         let p = {
             Image:image, 
             fName:fname, 
@@ -42,7 +44,27 @@ export class UserComponent
             password:password, 
             workplace:this.workplace
         }
+        console.log("Image accepted");
         this.register.emit(p);
+        
+    }
+
+    async editMe$(fname:string, lname:string, role:string, email:string, password:string, image:string)
+    {    
+        let p = {
+            personId:this.loggedIn.personId,
+            Image:image, 
+            fName:fname, 
+            lName:lname, 
+            role:role, 
+            email:email, 
+            password:password, 
+            workplace:this.workplace
+        }
+        
+        this.editMe.emit(p);
+        this.imageError = false;
+        
     }
 
     logIn(email:string, password:string)
@@ -66,22 +88,6 @@ export class UserComponent
         return null;
     }
 
-    editMe$(fname:string, lname:string, role:string, email:string, password:string, image:string)
-    {
-        let p = {
-            personId:this.loggedIn.personId,
-            Image:image, 
-            fName:fname, 
-            lName:lname, 
-            role:role, 
-            email:email, 
-            password:password, 
-            workplace:this.workplace
-        }
-        this.editMe.emit(p);
-        this.imageError = false;
-        this.imageUrlFix = image;
-    }
 
     deleteMe$()
     {

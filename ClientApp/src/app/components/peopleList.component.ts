@@ -14,6 +14,7 @@ export class PeopleListComponent{
     public innerWidth: number;
     private shadowColor?: string;
     private checkScroll: string = "UP";
+    private imageError: boolean = false;
 
     constructor(private pservice:PersonService){}
     
@@ -22,7 +23,6 @@ export class PeopleListComponent{
         console.log("PeopleListComponent.ngOnInit()");
         this.innerHeight = window.innerHeight - 70 - 180;
         this.innerWidth = window.innerWidth - 700;
-        console.log((this.people.length * this.rowHeight) + " ::: " + this.innerHeight);
     }
 
     @HostListener('window:scroll', ['$event']) 
@@ -31,6 +31,11 @@ export class PeopleListComponent{
       console.debug("Scroll Event", window.pageYOffset );
     }
     
+    imageHandler(person:Person)
+    {
+        this.imageError = true;
+    }
+
     async selectPerson(id:number)
     {
         if(this.loggedIn)

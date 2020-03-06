@@ -1,9 +1,43 @@
 <style>
-    div{
+    body{
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+    .ngtemplate{
         background-color:rgba(0, 0, 0, 0.3)
+    }
+    button.startChat{
+        position: relative;
+        left: 75px;
+        height: 100px;
+        width: 200px;
+        border-radius: 50px;
+    }
+    .ChatInfo{
+        background-color: white;
+        position: relative;
+        left: 75px;
+        height: 100px;
+        width: 200px;
+        border-radius: 50px;
+        text-align: center;
+        vertical-align: middle;
+        line-height: 100px;
     }
 </style>
 
-<div [style.height.px]='innerHeight' [style.width.px]='innerWidth'>
-    Log In and chat with people
-</div>
+<body [style.height.px]='innerHeight' [style.width.px]='innerWidth'>
+    <div *ngIf='loggedIn; then ChatReadyBox else WaitingForLogInBox'> </div>
+    <ng-template #ChatReadyBox style="height: inherit; width: inherit;">
+        <button class="startChat" *ngIf='!chatActive' (click)='startChat()' [style.top.px]='innerHeight/2-50' >Chat with selected people</button>
+        <div *ngIf='chatActive'>
+            <div style="position: relative; left: 10px">
+                <label>Chat title</label>
+                <input type="text" #TitleBox [value]='selectedChat.title'>
+                <button (click)='editChat$(TitleBox.value)'>Change</button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #WaitingForLogInBox style="height: inherit; width: inherit;">
+        <div class="ChatInfo" [style.top.px]='innerHeight/2-50'> Log in to chat</div>
+    </ng-template>
+</body>

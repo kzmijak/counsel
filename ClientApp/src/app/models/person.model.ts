@@ -7,8 +7,8 @@ export class Person
     (
         public personId?:number,
         public image?:string,
-        public fname?:string,
-        public lname?:string,
+        public fName?:string,
+        public lName?:string,
         public role?:string,
         public email?:string,
         public password?:string,

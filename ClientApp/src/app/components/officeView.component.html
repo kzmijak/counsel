@@ -28,11 +28,17 @@
             [loggedIn]="loggedIn"
             [selectedPeople]="selectedPeople"
             ></people-list-component>
-
-            <selection-component></selection-component>
+            <selection-component
+            ></selection-component>
         </div>
         <div class="inline" style="float: right;"> 
-            <chat-component></chat-component>
+            <chat-component
+            [loggedIn]="loggedIn"
+            [selectedPeople]="selectedPeople"
+            [chatHistory]="chatHistory"
+            (addChat)="addChat($event)"
+            (editChat)="editChat($event)"
+            ></chat-component>
         </div>
     </div>
 </body>

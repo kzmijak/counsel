@@ -7,7 +7,7 @@ namespace Counsel.Models
     public class Message
     {
         [Column("MessageId")]
-        public int MessageId {get;set;}
+        public int? MessageId {get;set;}
         [Column("Sender")]
         public Person Sender {get;set;}
 
@@ -15,7 +15,7 @@ namespace Counsel.Models
         public string Content {get;set;}
         
         [Column("Timestamp")]
-        public System.DateTime Timestamp {get;set;}
+        public System.DateTime? Timestamp {get;set;}
 
         public Chat Chat {get;set;}
     }

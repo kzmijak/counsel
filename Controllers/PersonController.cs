@@ -20,19 +20,26 @@ namespace Counsel.Controllers
                 .Include(c => c.Chats)
                 .ToList();
             people.ForEach( person => {
-                if(person.Chats != null)
-                {
-                    person.Chats=null;
-                }
                 if(person.Workplace != null)
                 {
                     Workplace newwork = new Workplace
                     {
-                        WorkplaceId = person.Workplace.WorkplaceId,
-                        EntryCode = person.Workplace.EntryCode,
-                        ConfirmationCode = person.Workplace.ConfirmationCode
+                        WorkplaceId = person.Workplace.WorkplaceId
+                        //EntryCode = person.Workplace.EntryCode,
+                        //ConfirmationCode = person.Workplace.ConfirmationCode
                     };
                     person.Workplace = newwork;
+                }
+                if(person.Chats != null)
+                {
+                    List<Chat> chats = new List<Chat>();
+                    ICollection<ChatPerson> cns = person.Chats;
+                    foreach(var connection in cns)
+                    {
+                        connection.Person = null;
+                        connection.Chat = null;
+                        connection.PersonId = null;
+                    }
                 }
             });
             return people;
@@ -45,7 +52,7 @@ namespace Counsel.Controllers
             Person person = context.People
                 .Where(c => c.PersonId == id)
                 .Include(c => c.Workplace)
-                .Include(c => c.Chats)
+                .Include(c => c.Chats).ThenInclude(c => c.Chat)
                 .First();
 
             if(person.Workplace != null)
@@ -60,9 +67,18 @@ namespace Counsel.Controllers
             }
             if(person.Chats != null)
             {
-                person.Chats=null;
+                List<Chat> chats = new List<Chat>(100);
+                ICollection<ChatPerson> cns = person.Chats;
+                foreach(var connection in cns)
+                {
+                    chats.Add(connection.Chat);
+                    connection.Person = null;
+                    connection.Chat = null;
+                    
+                }
+                person._Chats = chats;
+                person.Chats = null;
             }
-            // chats may cause stack overflow in the future
             return person;
         }
 

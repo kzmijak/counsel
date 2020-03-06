@@ -18,10 +18,9 @@ namespace Counsel
                     EntryCode = "1111",
                     ConfirmationCode = "1111"  
                 };
-                context.Workplaces.Add(w1);
-                context.SaveChanges();
 
-                context.People.AddRange(
+                var people = new[]
+                {
                     new Person
                     {
                         Image = "https://images.pexels.com/photos/428364/pexels-photo-428364.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
@@ -72,9 +71,66 @@ namespace Counsel
                         Password = "pjp111s",
                         Workplace = w1
                     }
+                };
+
+                var chats = new[]
+                {
+                    new Chat
+                    {
+                        Title = "Silent Workhorse"
+                    },
+                    new Chat
+                    {
+                        Title = "Majestic"
+                    },
+                    new Chat
+                    {
+                        Title = "Outraged Girafee"
+                    }
+                };
+                context.AddRange(
+                    new ChatPerson { Chat = chats[0], Person = people[0] },
+                    new ChatPerson { Chat = chats[0], Person = people[1] },
+                    new ChatPerson { Chat = chats[0], Person = people[2] },
+                    new ChatPerson { Chat = chats[0], Person = people[3] },
+                    new ChatPerson { Chat = chats[1], Person = people[0] },
+                    new ChatPerson { Chat = chats[1], Person = people[1] },
+                    new ChatPerson { Chat = chats[1], Person = people[2] },
+                    new ChatPerson { Chat = chats[1], Person = people[3] },
+                    new ChatPerson { Chat = chats[1], Person = people[4] },
+                    new ChatPerson { Chat = chats[2], Person = people[1] },
+                    new ChatPerson { Chat = chats[2], Person = people[4] },
+                    new Message
+                    {
+                        Sender = people[0],
+                        Content = "Hey!",
+                        Timestamp = System.DateTime.Now,
+                        Chat = chats[0]
+                    },
+                    new Message
+                    {
+                        Sender = people[1],
+                        Content = "Get lost",
+                        Timestamp = System.DateTime.Now,
+                        Chat = chats[0]
+                    },
+                    new Message
+                    {
+                        Sender = people[2],
+                        Content = "nice.",
+                        Timestamp = System.DateTime.Now,
+                        Chat = chats[0]
+                    },
+                    new Message
+                    {
+                        Sender = people[0],
+                        Content = "Wow feeling lonely now",
+                        Timestamp = System.DateTime.Now,
+                        Chat = chats[1]
+                    }
                 );
+                context.SaveChanges();
             }
-            context.SaveChanges();
         }
     }
 }
