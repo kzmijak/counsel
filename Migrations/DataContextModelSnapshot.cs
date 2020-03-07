@@ -71,7 +71,7 @@ namespace counsel.Migrations
                     b.Property<int?>("SenderPersonId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTime?>("Timestamp")
                         .HasColumnName("Timestamp")
                         .HasColumnType("datetime2");
 

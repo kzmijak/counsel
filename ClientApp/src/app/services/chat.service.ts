@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Chat } from "../models/chat.model";
 import { ChatPerson } from "../models/chatperson.model";
+import { Person } from "../models/person.model";
 
 const chatsUrl = "/api/chat/";
 
@@ -21,28 +22,21 @@ export class ChatService
         return this.http.get(chatsUrl + id);
     }
 
-    insertChat(chat:Chat): Observable<Chat>
+    insertChat(chat:Chat): Observable<any>
     {
-        let chatpersonarray =  []
-        chat.people.forEach( c => {
-            let p = { chatId: chat.chatId, personId: c.personId}
-            chatpersonarray.push(p)
-        })
+        return this.http.post(chatsUrl, chat);
+    }
 
-        let p = {
-            title:chat.title, people: chatpersonarray
-        }
-        console.log("BEFORE PUTTING PEOPLE")
-        console.log(p);
-        this.getChat(1).subscribe(Response => {
-            console.log("GETTING RESPONSE")
-            console.log(Response)})
-
-        return this.http.post(chatsUrl, p);
+    insertChatPerson(nchat:Chat, nperson:Person): Observable<any>
+    {
+        let chatPerson = { chatId:nchat.chatId, chat:nchat , personId: nperson.personId, person:nperson }
+        console.log("ID COMPARISON: " + nchat.chatId + " " + nperson.personId);
+        return this.http.post(chatsUrl + "cp", chatPerson);
     }
 
     updateChat(chat:any): Observable<Chat>
     {
-        return this.http.put(chatsUrl + chat.chatId, chat);
+        console.log(chat);
+        return this.http.patch(chatsUrl + chat.chatId, chat);
     }
 }

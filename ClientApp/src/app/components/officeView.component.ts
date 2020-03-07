@@ -4,7 +4,9 @@ import { WorkplaceService } from "../services/workplace.service";
 import { PersonService } from "../services/person.service";
 import { Person } from "../models/person.model";
 import { Chat } from "../models/chat.model";
+import { Message } from "../models/message.model";
 import { ChatService } from "../services/chat.service";
+import { MessageService } from "../services/message.service";
 
 @Component({
     selector: "office-view-component",
@@ -14,7 +16,7 @@ export class OfficeViewComponent implements OnInit{
     public innerWidth: any;
     public innerHeight: any;
 
-    constructor(private wpservice: WorkplaceService, private pservice: PersonService, private cservice: ChatService ){}
+    constructor(private wpservice: WorkplaceService, private pservice: PersonService, private cservice: ChatService, private mservice: MessageService ){}
 
     ngOnInit() 
     {
@@ -69,6 +71,7 @@ export class OfficeViewComponent implements OnInit{
     {
         localStorage.removeItem("selectedPeople")
         localStorage.removeItem("loggedIn");
+        localStorage.removeItem("selectedChat")
     }
 
     get loggedIn()
@@ -97,16 +100,63 @@ export class OfficeViewComponent implements OnInit{
         return JSON.parse(localStorage.getItem("chatHistory"));
     }
 
-    addChat(chat:Chat)
+
+    async addChat(chat:Chat)
     {
-        console.log("ADDING!")
-        console.log(chat)
-        this.cservice.insertChat(chat).subscribe(Response => console.log(Response));
+        await this.addChatPromise(chat);
+        this.selectedPeople.forEach( person => {
+          this.cservice.insertChatPerson(this.selectedChat, person).subscribe();
+          console.log(this.selectedChat.chatId);
+        })
+    }
+
+    async addChatPromise(chat:Chat): Promise<any>
+    {
+        return new Promise( resolve => {
+            this.cservice.insertChat(chat).subscribe( Response => {
+                localStorage.setItem("selectedChat", JSON.stringify(Response));
+                resolve();
+            });
+        })
+    }
+
+    get selectedChat(): Chat
+    {
+        return JSON.parse(localStorage.getItem("selectedChat"));
+    }
+
+    selectChat(chat:Chat)
+    {
+        localStorage.setItem("selectedChat", JSON.stringify(chat));
+        console.log("MESSAGES");
+        let temp = [];
+        this.mservice.getMessages().subscribe(Response => {
+            Response.forEach( m => {
+                if(this.selectedChat.messages.map(c => (c as Message).messageId).includes((m as Message).messageId))
+                {
+                    console.log(m);
+                    temp.push(m);
+                }
+                localStorage.setItem("messages", JSON.stringify(temp));
+                console.log(temp);
+            })
+        })
     }
 
     editChat(chat:Chat)
     {
-        console.log("UPDATING!")
-        this.cservice.updateChat(chat);
+        this.cservice.updateChat(chat).subscribe(Response => {
+            this.ngOnInit();
+        });
+    }
+
+    exitChat(chat:Chat)
+    {
+        localStorage.removeItem("selectedChat");
+    }
+
+    get messages(): Message[]
+    {
+        return JSON.parse(localStorage.getItem("messages"));
     }
 }

@@ -134,18 +134,26 @@ export class PeopleListComponent{
             return true;
         }
         return false;*/
-        if(this.checkScroll == "LOW" || this.checkScroll == "MID")
+        
+        if((this.people.length * this.rowHeight)>this.innerHeight)
         {
-            return true;
+            if(this.checkScroll == "LOW" || this.checkScroll == "MID")
+            {
+                return true;
+            }
         }
         return false;
     }
 
     get scrollUp(): boolean
     {
-        if(this.checkScroll == "UP" || this.checkScroll == "MID")
+        
+        if((this.people.length * this.rowHeight)>this.innerHeight)
         {
-            return true;
+            if(this.checkScroll == "UP" || this.checkScroll == "MID")
+            {
+                return true;
+            }
         }
         return false;
     }

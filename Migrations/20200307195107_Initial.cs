@@ -91,7 +91,7 @@ namespace counsel.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SenderPersonId = table.Column<int>(nullable: true),
                     Content = table.Column<string>(nullable: true),
-                    Timestamp = table.Column<DateTime>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: true),
                     ChatId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

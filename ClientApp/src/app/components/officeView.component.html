@@ -36,8 +36,13 @@
             [loggedIn]="loggedIn"
             [selectedPeople]="selectedPeople"
             [chatHistory]="chatHistory"
+            [selectedChat]="selectedChat"
+            [messages]="messages"
             (addChat)="addChat($event)"
+            (selectChat)="selectChat($event)"
             (editChat)="editChat($event)"
+            (exitChat)="exitChat()"
+            (sendMessage)="sendMessage($event)"
             ></chat-component>
         </div>
     </div>

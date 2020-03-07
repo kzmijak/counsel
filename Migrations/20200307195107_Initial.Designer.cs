@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace counsel.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200306181241_Initial")]
+    [Migration("20200307195107_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,7 +73,7 @@ namespace counsel.Migrations
                     b.Property<int?>("SenderPersonId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<DateTime?>("Timestamp")
                         .HasColumnName("Timestamp")
                         .HasColumnType("datetime2");
 
