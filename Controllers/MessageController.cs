@@ -20,20 +20,21 @@ namespace Counsel.Controllers
                 .Include(c => c.Sender)
                 .ToList();
             var nmessages = messages;
-            int index = 0;
+
             foreach(var message in messages)
             {
-                if(message.Chat != null)
-                {
-                    nmessages[index].Chat = new Chat{ ChatId = message.Chat.ChatId };
-                }
                 if(message.Sender != null)
                 {
-                    nmessages[index].Sender = new Person{ PersonId = message.Sender.PersonId};
+                    message.Sender.Chats = null;
+                    message.Sender.Workplace = null;
                 }
-                index++;
+                if(message.Chat != null)
+                {
+                    message.Chat.Messages = null;
+                    message.Chat.People = null;
+                }
             }
-            return nmessages;
+            return messages;
         }
 
         [HttpGet("{id}")]
@@ -65,11 +66,13 @@ namespace Counsel.Controllers
         {
             if(ModelState.IsValid)
             {
+                message.Sender = context.People.Find(message.Sender.PersonId);
+                message.Chat = context.Chats.Find(message.Chat.ChatId);
                 context.Add(message);
                 context.SaveChanges();
-                return Ok(message);
+                return Ok(message.MessageId);
             }
-            return BadRequest(ModelState);
+            return BadRequest(message);
         }
     }
 }

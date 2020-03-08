@@ -18,24 +18,44 @@ export class OfficeViewComponent implements OnInit{
 
     constructor(private wpservice: WorkplaceService, private pservice: PersonService, private cservice: ChatService, private mservice: MessageService ){}
 
-    ngOnInit() 
+    async ngOnInit() 
     {
-        console.log("OfficeViewComponent.ngOnInit()");  
         this.innerWidth = window.innerWidth;
         this.innerHeight = window.innerHeight;
 
-        let temp = [];
-        this.pservice.getPeople().subscribe(Response => {
+        await this.setPeople();
+        await this.setChats();
+        this.readyToLoad = true;
+    }
+
+    private readyToLoad:boolean = false;
+
+    async setPeople()
+    {
+        return new Promise( resolve => {
+            let temp = [];
+            this.pservice.getPeople().subscribe(Response => {
             Response.forEach(p => {
                 if(p.workplace.workplaceId == this.workplace.workplaceId)
                     temp.push(p);
-            })
-            localStorage.setItem("people", JSON.stringify(temp));
-        });
-        this.cservice.getChats().subscribe(Response => {
-            localStorage.setItem("chatHistory", JSON.stringify(Response));
+                })
+                localStorage.setItem("people", JSON.stringify(temp));
+                localStorage.setItem("_backup_people", JSON.stringify(temp));
+                resolve();
+            });
         })
     }
+
+    async setChats()
+    {
+        return new Promise( resolve => {
+            this.cservice.getChats().subscribe(Response => {
+                localStorage.setItem("chatHistory", JSON.stringify(Response));
+                resolve();
+            })
+        })
+    }
+
 
     get workplace():Workplace
     {
@@ -106,7 +126,6 @@ export class OfficeViewComponent implements OnInit{
         await this.addChatPromise(chat);
         this.selectedPeople.forEach( person => {
           this.cservice.insertChatPerson(this.selectedChat, person).subscribe();
-          console.log(this.selectedChat.chatId);
         })
     }
 
@@ -127,19 +146,20 @@ export class OfficeViewComponent implements OnInit{
 
     selectChat(chat:Chat)
     {
+        if(chat.messages == null)
+        {
+            chat.messages = [];
+        }
         localStorage.setItem("selectedChat", JSON.stringify(chat));
-        console.log("MESSAGES");
         let temp = [];
         this.mservice.getMessages().subscribe(Response => {
             Response.forEach( m => {
-                if(this.selectedChat.messages.map(c => (c as Message).messageId).includes((m as Message).messageId))
+                if(chat.messages.length > 0 && this.selectedChat.messages.map(c => (c as Message).messageId).includes((m as Message).messageId))
                 {
-                    console.log(m);
                     temp.push(m);
                 }
-                localStorage.setItem("messages", JSON.stringify(temp));
-                console.log(temp);
             })
+            localStorage.setItem("messages", JSON.stringify(temp));
         })
     }
 
@@ -157,6 +177,62 @@ export class OfficeViewComponent implements OnInit{
 
     get messages(): Message[]
     {
-        return JSON.parse(localStorage.getItem("messages"));
+        let val = JSON.parse(localStorage.getItem("messages"));
+        if(val == undefined)
+        {
+            return [];
+        }
+        return val;
+    }
+
+    sendMessage(msg:Message)
+    {
+        this.mservice.insertMessage(msg).subscribe();
+        this.ngOnInit();
+    }
+
+    findPeople(selection:any)
+    {
+        this.resetSelection();
+        let newpeople: Person[] = [];
+        if(!selection.fullname)
+        {
+            selection.fullname = '';
+        }
+        if(!selection.email)
+        {
+            selection.email = '';
+        }
+        if(!selection.role)
+        {
+            selection.role = '';
+        }
+        selection.fullname = selection.fullname.toLowerCase();
+        selection.email = selection.email.toLowerCase();
+        selection.role = selection.role.toLowerCase();
+
+        this.people.forEach( p => {
+            let fullname = (  p.fName + " " + p.lName ).toLowerCase();
+            if( 
+                fullname.includes(selection.fullname)
+                && p.email.toLowerCase().includes(selection.email)
+                && p.role.toLowerCase().includes(selection.role)
+            )
+            {
+                newpeople.push(p);
+            }
+        })
+        console.log(newpeople);
+        localStorage.setItem("people", JSON.stringify(newpeople));
+    }
+
+    resetSelection()
+    {
+        localStorage.setItem("people", localStorage.getItem("_backup_people"));
+    }
+
+    selectPeople(people:Person[])
+    {
+        localStorage.setItem("selectedPeople", JSON.stringify(people)); 
     }
 }

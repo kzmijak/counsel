@@ -16,7 +16,9 @@ namespace Counsel.Controllers
         [HttpGet]
         public IEnumerable<Workplace> GetWorkplaces()
         {
-            var workplaces = context.Workplaces.Include(c => c.Employees).ToList();
+            var workplaces = context.Workplaces
+                .Include(c => c.Employees)
+                .ToList();
             workplaces.ForEach(m => {
                 foreach (var person in m.Employees)
                 {

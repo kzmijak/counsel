@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Message } from "@angular/compiler/src/i18n/i18n_ast";
+import { Message } from "../models/message.model";
 
 const messagesUrl = "/api/message/"
 
@@ -15,13 +15,13 @@ export class MessageService
         return this.http.get<any>(messagesUrl);
     }
 
-    getMessage(id:number): Observable<Message>
+    getMessage(id:number): Observable<any>
     {
-        return this.http.get<any>(messagesUrl + id);
+        return this.http.get(messagesUrl + id);
     }
 
-    insertMessage(message:Message): Observable<Message>
+    insertMessage(message:Message): Observable<any>
     {
-        return this.http.put<any>(messagesUrl, message);
+        return this.http.post(messagesUrl, message);
     }
 }

@@ -39,7 +39,7 @@
             <tr [style.height.px]='rowHeight' *ngFor="let p of people">
                 <div class="inline">
                     <a>
-                        <img [style.box-shadow]='selected(p.personId)' (click)="selectPerson(p.personId)" src={{p.image}}>
+                        <img style="margin: 5px;" [style.box-shadow]='selected(p.personId)' (click)="selectPerson(p.personId)" src={{p.image}}>
                     </a>
                 </div>
                 <div class="inline">

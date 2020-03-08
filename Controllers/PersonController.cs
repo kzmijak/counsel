@@ -17,31 +17,26 @@ namespace Counsel.Controllers
         {
             var people = context.People
                 .Include(c => c.Workplace)
-                .Include(c => c.Chats)
+                .Include(c => c.Chats).ThenInclude(c => c.Chat)
                 .ToList();
-            people.ForEach( person => {
+            foreach(var person in people) 
+            {
                 if(person.Workplace != null)
                 {
-                    Workplace newwork = new Workplace
-                    {
-                        WorkplaceId = person.Workplace.WorkplaceId
-                        //EntryCode = person.Workplace.EntryCode,
-                        //ConfirmationCode = person.Workplace.ConfirmationCode
-                    };
-                    person.Workplace = newwork;
+                    person.Workplace.Employees = null;
                 }
                 if(person.Chats != null)
                 {
-                    List<Chat> chats = new List<Chat>();
-                    ICollection<ChatPerson> cns = person.Chats;
-                    foreach(var connection in cns)
+                    person._Chats = new List<Chat>();
+                    foreach(var connection in person.Chats)
                     {
-                        connection.Person = null;
-                        connection.Chat = null;
-                        connection.PersonId = null;
+                        connection.Chat.People = null;
+                        connection.Chat.Messages = null;
+                        person._Chats.Add(connection.Chat);
                     }
+                    person.Chats = null;
                 }
-            });
+            }
             return people;
 
         }  
@@ -57,26 +52,17 @@ namespace Counsel.Controllers
 
             if(person.Workplace != null)
             {
-                Workplace newwork = new Workplace
-                {
-                    WorkplaceId = person.Workplace.WorkplaceId,
-                    EntryCode = person.Workplace.EntryCode,
-                    ConfirmationCode = person.Workplace.ConfirmationCode
-                };
-                person.Workplace = newwork;
+                person.Workplace.Employees = null;
             }
             if(person.Chats != null)
             {
-                List<Chat> chats = new List<Chat>(100);
-                ICollection<ChatPerson> cns = person.Chats;
-                foreach(var connection in cns)
+                person._Chats = new List<Chat>();                
+                foreach(var connection in person.Chats)
                 {
-                    chats.Add(connection.Chat);
-                    connection.Person = null;
-                    connection.Chat = null;
-                    
+                    connection.Chat.People = null;
+                    connection.Chat.Messages = null;
+                    person._Chats.Add(connection.Chat);
                 }
-                person._Chats = chats;
                 person.Chats = null;
             }
             return person;

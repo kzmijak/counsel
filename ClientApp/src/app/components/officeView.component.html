@@ -7,7 +7,7 @@
     div.inline { float:left; }
 </style>
 
-<body [style.height.px]='innerHeight' [style.width.px]='innerWidth'>
+<body [style.height.px]='innerHeight' [style.width.px]='innerWidth' *ngIf=readyToLoad>
     <navigation-component></navigation-component>
     <div>
         <div class="inline">
@@ -29,6 +29,12 @@
             [selectedPeople]="selectedPeople"
             ></people-list-component>
             <selection-component
+            [loggedIn]="loggedIn"
+            [people]="people"
+            [selectedPeople]="selectedPeople"
+            [chatHistory]="chatHistory"
+            (findPeople)="findPeople($event)"
+            (selectPeople)="selectPeople($event)"
             ></selection-component>
         </div>
         <div class="inline" style="float: right;"> 

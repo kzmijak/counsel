@@ -110,21 +110,21 @@ namespace Counsel
                     new Message
                     {
                         Sender = people[1],
-                        Content = "Get lost",
+                        Content = "Not this guy again...",
                         Timestamp = System.DateTime.Now,
                         Chat = chats[0]
                     },
                     new Message
                     {
                         Sender = people[2],
-                        Content = "nice.",
+                        Content = "Careful, he's your CEO!",
                         Timestamp = System.DateTime.Now,
                         Chat = chats[0]
                     },
                     new Message
                     {
                         Sender = people[0],
-                        Content = "Wow feeling lonely now",
+                        Content = "Fix my car dude.",
                         Timestamp = System.DateTime.Now,
                         Chat = chats[1]
                     }

@@ -30,7 +30,6 @@ export class ChatService
     insertChatPerson(nchat:Chat, nperson:Person): Observable<any>
     {
         let chatPerson = { chatId:nchat.chatId, chat:nchat , personId: nperson.personId, person:nperson }
-        console.log("ID COMPARISON: " + nchat.chatId + " " + nperson.personId);
         return this.http.post(chatsUrl + "cp", chatPerson);
     }
 

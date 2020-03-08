@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, SystemJsNgModuleLoader, OnChanges, SimpleChange, SimpleChanges } from "@angular/core";
 import { Person } from "../models/person.model";
 import { Chat } from "../models/chat.model";
 import { Message } from "../models/message.model";
@@ -7,7 +7,7 @@ import { Message } from "../models/message.model";
     selector: "chat-component",
     templateUrl: "chat.component.html"
 })
-export class ChatComponent implements OnInit
+export class ChatComponent implements OnInit, OnChanges
 {
     @Input() loggedIn: Person;
     @Input() selectedPeople: Person[];
@@ -30,6 +30,11 @@ export class ChatComponent implements OnInit
         this.innerHeight = window.innerHeight - 70;
     }
 
+    ngOnChanges(changes:SimpleChanges)
+    {
+        console.log(changes);
+    }
+
     startChat()
     {
         let selectedChat: Chat;
@@ -39,22 +44,15 @@ export class ChatComponent implements OnInit
 
             let array1 = this.selectedPeople.map( c => c.personId).sort( (a,b) => a-b).toString();
             this.chatHistory.forEach(chat => {
-                let array2 = chat.people.map( c => c.personId).sort( (a,b) => a-b).toString();
-                console.log("CHAT COMPARISON")
-                console.log(array1)
-                console.log(array2)
-                console.log(array1 == array2)
+                let array2 = chat._People.map( c => c.personId).sort( (a,b) => a-b).toString();
                 if(array1 == array2)
                 {
-                    console.log(array1 == array2)
-                    selectedChat = chat;
+                    this.selectChat.emit(chat);
                     needadd = false;
                 }
             })
             if(needadd)
-            {
-                console.log("HEY FUCK IM HERE!!!!!")
-                
+            {   
                 let ntitle:string = "";
                 this.selectedPeople.forEach( c => {
                     ntitle += c.fName + " " + c.lName + ", "
@@ -91,25 +89,38 @@ export class ChatComponent implements OnInit
     {
         this.exitChat.emit();
     }
+
+    currentMessage(index,item)
+    {
+        this.msgprops = {
+            timestamp: item.timestamp.toLocaleString,
+            name: item.sender.fName + " " + item.sender.lName,
+            content: item.content
+        }
+    }
+    private msgprops:any;
+
+    private taVal: any;
+    sendMessage$()
+    {
+        var today = new Date();
+        let text = this.taVal.substr(0, this.taVal.length - 1)
+        let message = {
+            content : text,
+            sender: this.loggedIn,
+            chat: this.selectedChat,
+            timestamp: today }
+        this.taVal = "";
+
+        this.sendMessage.emit(message);
+        this.startChat();
+    }
+
+    reloadComponent()
+    {
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!ELOADING")
+        this.startChat();
+    }
+
+    private reload = true;
 }
-
-/*
-
-        console.log("CHAT INPUT")
-        console.log(chat)
-        let chatPeople: ChatPerson[] = [];
-        let chatPerson: ChatPerson = new ChatPerson;
-        chat._People.forEach( p => {
-            p._Chats = null;
-            chatPerson.person = p;
-            chatPerson.personId = p.personId;
-            chatPerson.chat = chat;
-            chatPeople.push(chatPerson);
-        })
-        chat.people = chatPeople;
-        chat.messages = null;
-        chat._People = null;
-        console.log("CHAT SET")
-        console.log(chat)
-        return this.http.post(chatsUrl, chat);
-*/

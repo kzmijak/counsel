@@ -7,40 +7,43 @@ using Microsoft.EntityFrameworkCore;
 namespace Counsel.Controllers
 {
     [Route("api/chat")]
-    public class ChatController: Controller
+    public class ChatController : Controller
     {
         private DataContext context;
-        public ChatController(DataContext ctx) => (context)=(ctx);
+        public ChatController(DataContext ctx) => (context) = (ctx);
 
         [HttpGet]
         public IEnumerable<Chat> GetChats()
         {
             var chats = context.Chats
-                .Include(c => c.People)
-                .Include(c => c.Messages)
+                .Include(c => c.People).ThenInclude( p => p.Person)
+                .Include(c => c.Messages).ThenInclude(m => m.Sender)
                 .ToList();
-            var newchat = new List<Chat>();
-            newchat = chats;
-            var newmessages = new List<Message>();
-            var newpeople = new List<ChatPerson>();
-            int index = 0;
-            foreach(var c in chats)
+            foreach (var chat in chats)
             {
-                if(c.Messages != null)
+                if (chat.Messages != null)
                 {
-                    newmessages = c.Messages.Select(c => new Message{MessageId = c.MessageId}).ToList();
+                    foreach (var message in chat.Messages)
+                    {
+                        message.Chat = null;
+                        message.Sender.Chats = null;
+                        message.Sender.Workplace = null;
+                    }
                 }
-                newchat[index].Messages = newmessages;
 
-                if(c.People != null)
+                if (chat.People != null)
                 {
-                    newpeople = c.People.Select(c => new ChatPerson{ PersonId = c.PersonId }).ToList();
+                    chat._People = new List<Person>();
+                    foreach (var person in chat.People)
+                    {
+                        chat._People.Add(person.Person);
+                        person.Person.Chats = null;
+                        person.Person.Workplace = null;
+                    }
+                    chat.People = null;
                 }
-                newchat[index].People = newpeople;
-                
-                index++;
             }
-            return newchat;
+            return chats;
         }
 
         [HttpGet("{id}")]
@@ -49,33 +52,30 @@ namespace Counsel.Controllers
             var chat = context.Chats
                 .Include(c => c.People).ThenInclude(c => c.Person)
                 .Include(c => c.Messages)
-                .Where( c => c.ChatId == id)
+                .Where(c => c.ChatId == id)
                 .FirstOrDefault();
-            
-            if(chat.Messages != null)
+
+            if (chat.Messages != null)
             {
-                chat.Messages = chat.Messages.Select( c => new Message{
-                    Sender = new Person{
-                        PersonId = c.Sender.PersonId
-                    },
-                    MessageId = c.MessageId,
-                    Content = c.Content,
-                    Timestamp = c.Timestamp
-                }).ToList();
+                foreach (var message in chat.Messages)
+                {
+                    message.Chat = null;
+                    message.Sender.Chats = null;
+                    message.Sender.Workplace = null;
+                }
             }
 
-            List<Person> people = new List<Person>();
-            if(chat.People != null)
-            {
-                foreach(var person in chat.People)
+            if (chat.People != null)
                 {
-                    person.Person.Chats = null;
-                    person.Person.Workplace = null;
-                    people.Add(person.Person);
+                    chat._People = new List<Person>();                    
+                    foreach (var person in chat.People)
+                    {
+                        person.Person.Chats = null;
+                        person.Person.Workplace = null;
+                        chat._People.Add(person.Person);
+                    }
+                    chat.People = null;
                 }
-                chat.People = null;
-            } 
-            chat._People = people;
 
             return chat;
         }
@@ -83,7 +83,7 @@ namespace Counsel.Controllers
         [HttpPost]
         public IActionResult InsertChat([FromBody] Chat chat)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 context.Add(chat);
                 context.SaveChanges();
@@ -100,14 +100,14 @@ namespace Counsel.Controllers
                 .Include(c => c.Chat)
                 .ToList();
 
-            foreach( var c in cp)
+            foreach (var c in cp)
             {
-                if(c.Person != null)
+                if (c.Person != null)
                 {
                     c.Person.Workplace = null;
                     c.Person.Chats = null;
                 }
-                if(c.Chat != null)
+                if (c.Chat != null)
                 {
                     c.Chat.Messages = null;
                     c.Chat.People = null;
@@ -120,7 +120,7 @@ namespace Counsel.Controllers
         [HttpPost("cp")]
         public IActionResult InsertChatPerson([FromBody] ChatPerson chatPerson)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 context.Attach(chatPerson.Chat);
                 context.Attach(chatPerson.Person);
@@ -135,7 +135,7 @@ namespace Counsel.Controllers
         [HttpPatch("{id}")]
         public IActionResult UpdateChat(int id, [FromBody] Chat chat)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var old = context.Chats.Find(id);
                 old.Title = chat.Title;

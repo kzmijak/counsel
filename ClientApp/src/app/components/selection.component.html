@@ -2,9 +2,65 @@
     .bar{
         background-color: rgba(149, 72, 151, 0.15);
     }
+    .findTool{
+        width: inherit;
+        text-align: center;
+        font-size: 20px;
+        height: 30px;
+    }
+    th{
+        position: relative;
+        text-align: center;
+        top: 10px;
+    }
+    table{
+        position: relative;
+        height: 90px;
+        bottom: 5px;
+    }
+
+    .searchButton{
+        position: relative;
+        height: 60px;
+        width: 80px;
+        border-radius: 30px;
+        bottom: 5px;
+    }
+
+    input{
+        border-radius: 5px;
+        padding: 5px;
+        border: rgba(0,0,0,0);
+    }
+
+    .chatButton{
+        border-radius: 10px;
+        height: 40px;
+        margin: 5px;
+    }
+
 </style>
 
 <div class="bar" [style.height.px]='innerHeight' [style.width.px]='innerWidth'>
-    <div>
-    </div>
+    <div *ngIf='loggedIn; then YourChats else SearchEngine'></div>
+
+    <ng-template #YourChats>
+        <div>
+            <button (click)="selectPeople$(chat._People)" class="chatButton" *ngFor='let chat of yourChats'>{{chat.title}}</button>
+        </div>
+    </ng-template>
+
+
+    <ng-template #SearchEngine>
+        <div class="findTool">
+            Find...
+        </div>
+        <table [style.width.px]='innerWidth*0.7' [style.left.px]='innerWidth*0.15'>
+            <tr><th>By name</th><th>By email</th><th>By role</th></tr>
+            <tr><td><input #NameBox type="text"></td><td><input #EmailBox type="text"></td><td><input #RoleBox type="text"></td></tr>
+        </table>
+        <div [style.left.px]='innerWidth/2'>
+            <button (click)='findPeople$(NameBox.value, EmailBox.value, RoleBox.value)' class="searchButton" [style.left.px]='innerWidth/2-40'>Search</button>
+        </div>
+    </ng-template>
 </div>
